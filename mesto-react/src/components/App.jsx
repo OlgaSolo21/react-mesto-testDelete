@@ -4,14 +4,15 @@ import Footer from "./Footer.jsx";
 import Main from "./Main.jsx";
 import PopupWithForm from "./PopupWithForm.jsx";
 import ImagePopup from "./ImagePopup.jsx";
-import {useState} from "react";
+import api from "../utils/api.js";
+import {useState, useEffect} from "react";
 
 function App() {
     //пишем [переменные is и их внутреннее состояние setIs] для открытия попапов
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
-    //const [isDeleteCard, setIsDeleteCard] = useState(false)
+    //const [isDeleteCard, setIsDeleteCard] = useState(false) //попап удаления своей карточки
 
     //функции обработчики событий, которые изменяют внутреннее состояние
     function handleEditProfileClick() { //редактирование профиля
@@ -24,14 +25,52 @@ function App() {
         setIsEditAvatarPopupOpen(true)
     }
 
-    // function handleDeleteCard() { //редактирование аватара
+    // function handleDeleteCard() { //попап удаления своей карточки заготовка
     //     setIsDeleteCard(true)
     // }
-    
+
     function closeAllPopups() {
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)
         setIsEditAvatarPopupOpen(false)
+        setSelectedCard({})
+    }
+
+    // переменная состояния имени, о себе и аватара для запроса их с сервера
+    const [userData, setUserData] = useState({
+        name: '',
+        about: '',
+        avatar: ''
+    })
+
+    // переменная состояния для массива карточек и запрос на сервер за ними
+    const [cardItem, setCardItem] = useState([])
+
+    useEffect(() => { //используем хук для монтирования данных на страницу
+        api.getUserProfile() //данные пользователя
+            .then((data) => {
+                setUserData({
+                    name: data.name,
+                    about: data.about,
+                    avatar: data.avatar
+                })
+            })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`)
+            });
+        api.getInitialCards() // данные карточек
+            .then((data) => {
+                setCardItem(data)
+            })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`)
+            });
+    }, []);
+
+    //стейт-переменная открытия карточки на весь экран
+    const [isSelectedCard, setSelectedCard] = useState({})
+    function handleOpenFullScreenCard(card) {
+        setSelectedCard(card)
     }
 
   return (
@@ -41,7 +80,10 @@ function App() {
               onEditProfile={handleEditProfileClick} //редактирование профиля
               onAddPlace={handleAddPlaceClick} //добавление картинки
               onEditAvatar={handleEditAvatarClick} //редактирование аватара
-              //onDeleteCard={handleDeleteCard}
+              cardItem={cardItem}
+              userData={userData}
+              onCardClick={handleOpenFullScreenCard}
+              //onDeleteCard={handleDeleteCard} //попап удаления своей карточки
           />
           <Footer/>
           <PopupWithForm
@@ -149,7 +191,11 @@ function App() {
           {/*>*/}
           {/*</PopupWithForm>*/}
 
-          <ImagePopup/>
+          <ImagePopup
+              card={isSelectedCard}
+              onClose={closeAllPopups}
+              isOpen={isSelectedCard._id !== undefined}
+          />
       </>
   )
 }

@@ -33,8 +33,8 @@ class Api {
             headers: this._headers,
             method: 'PATCH',
             body: JSON.stringify({
-                name: data.UserName,
-                about: data.UserJob
+                name: data.name,
+                about: data.about
             })
         })
             .then(this._handleResponse)
@@ -44,10 +44,7 @@ class Api {
         return fetch(`${this._url}/cards`, {
             headers: this._headers,
             method: 'POST',
-            body: JSON.stringify({
-                name: data.UserPlace,
-                link: data.UserLink
-            })
+            body: JSON.stringify(data)
         })
             .then(this._handleResponse)
     }
@@ -81,7 +78,7 @@ class Api {
             headers: this._headers,
             method: 'PATCH',
             body: JSON.stringify({
-                avatar: data.AvatarLink
+                avatar: data.avatar
             })
         })
             .then(this._handleResponse)
