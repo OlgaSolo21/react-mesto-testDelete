@@ -4,8 +4,7 @@ import Footer from "./Footer.jsx";
 import Main from "./Main.jsx";
 import PopupWithForm from "./PopupWithForm.jsx";
 import ImagePopup from "./ImagePopup.jsx";
-import api from "../utils/api.js";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 
 function App() {
     //пишем [переменные is и их внутреннее состояние setIs] для открытия попапов
@@ -36,39 +35,8 @@ function App() {
         setSelectedCard({})
     }
 
-    // переменная состояния имени, о себе и аватара для запроса их с сервера
-    const [userData, setUserData] = useState({
-        name: '',
-        about: '',
-        avatar: ''
-    })
-
-    // переменная состояния для массива карточек и запрос на сервер за ними
-    const [cardItem, setCardItem] = useState([])
-
-    useEffect(() => { //используем хук для монтирования данных на страницу
-        api.getUserProfile() //данные пользователя
-            .then((data) => {
-                setUserData({
-                    name: data.name,
-                    about: data.about,
-                    avatar: data.avatar
-                })
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`)
-            });
-        api.getInitialCards() // данные карточек
-            .then((data) => {
-                setCardItem(data)
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`)
-            });
-    }, []);
-
     //стейт-переменная открытия карточки на весь экран
-    const [isSelectedCard, setSelectedCard] = useState({})
+    const [selectedCard, setSelectedCard] = useState({})
     function handleOpenFullScreenCard(card) {
         setSelectedCard(card)
     }
@@ -80,8 +48,6 @@ function App() {
               onEditProfile={handleEditProfileClick} //редактирование профиля
               onAddPlace={handleAddPlaceClick} //добавление картинки
               onEditAvatar={handleEditAvatarClick} //редактирование аватара
-              cardItem={cardItem}
-              userData={userData}
               onCardClick={handleOpenFullScreenCard}
               //onDeleteCard={handleDeleteCard} //попап удаления своей карточки
           />
@@ -93,6 +59,7 @@ function App() {
               //должно задаваться с помощью соответствующей переменной состояния (из тз 10пр для понимания)
               isOpen={isEditProfilePopupOpen} //переменная состояния
               onClose={closeAllPopups}
+              buttonText='Сохранить'
           >
               <input
                   type="text"
@@ -131,6 +98,7 @@ function App() {
               title='Обновить аватар'
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}
+              buttonText='Обновить'
           >
               <input
                   type="url"
@@ -152,6 +120,7 @@ function App() {
               title='Новое место'
               isOpen={isAddPlacePopupOpen}
               onClose={closeAllPopups}
+              buttonText='Добавить'
           >
               <input
                   type="text"
@@ -186,15 +155,16 @@ function App() {
           {/*<PopupWithForm*/}
           {/*    name='delete-card'*/}
           {/*    title='Вы уверены?'*/}
+          {/*    buttonText='Да'*/}
           {/*    isOpen={isDeleteCard}*/}
           {/*    onClose={closeAllPopups}*/}
           {/*>*/}
           {/*</PopupWithForm>*/}
 
           <ImagePopup
-              card={isSelectedCard}
+              card={selectedCard}
               onClose={closeAllPopups}
-              isOpen={isSelectedCard._id !== undefined}
+              isOpen={selectedCard._id !== undefined}
           />
       </>
   )

@@ -1,7 +1,40 @@
 // !--MAIN - ЭТО РАЗМЕТКА ДЛЯ ОСНОВНОЙ ЧАСТИ СТРАНИЦЫ (ФУТЕР И ХЕДЕР ОТДЕЛЬНО)--! //
 import addButton from "../images/addButton.svg";
 import Card from "./Card.jsx";
-function Main({onEditProfile, onEditAvatar, onAddPlace, userData, cardItem, onCardClick}) {
+import api from "../utils/api.js";
+import {useState, useEffect} from "react";
+
+function Main({onEditProfile, onEditAvatar, onAddPlace, onCardClick}) {
+
+    // переменная состояния имени, о себе и аватара для запроса их с сервера
+    const [userData, setUserData] = useState({
+        name: '',
+        about: '',
+        avatar: ''
+    })
+
+    // переменная состояния для массива карточек и запрос на сервер за ними
+    const [cardsItem, setCardsItem] = useState([])
+
+    useEffect(() => { //используем хук для монтирования данных на страницу
+        api.getUserProfile() //данные пользователя
+            .then((data) => {
+                setUserData({
+                    name: data.name,
+                    about: data.about,
+                    avatar: data.avatar
+                })
+            })
+            .catch(console.error)
+
+        api.getInitialCards() // данные карточек
+            .then((data) => {
+                setCardsItem(data)
+            })
+            .catch(console.error)
+    }, []);
+
+
     return(
         <main className="content">
             <section className="profile">
@@ -42,7 +75,7 @@ function Main({onEditProfile, onEditAvatar, onAddPlace, userData, cardItem, onCa
             </section>
             <section className="cards">
                 <ul className="cards__elements">
-                    {cardItem.map((card) => (
+                    {cardsItem.map((card) => (
                         <Card
                             key={card._id}
                             card={card}
