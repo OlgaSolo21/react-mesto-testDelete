@@ -51,21 +51,28 @@ class Api {
             .then(this._handleResponse)
     }
 
-    setLikeCardPut(cardId) { // Постановка лайка
+    changeLikeCardStatus(cardId, like) {// Постановка лайка и Снятие лайка универсальная функция для App
         return fetch(`${this._url}/cards/${cardId}/likes`, {
-            headers: this._headers,
-            method: 'PUT'
-        })
-            .then(this._handleResponse)
+                    headers: this._headers,
+                    method: like ? 'PUT' : 'DELETE' // где like это булевая переменная которая определяется при вызове метода changeLikeCardStatus
+                })
+                    .then(this._handleResponse)
     }
-
-    deleteLikeCard(cardId) { // Снятие лайка
-        return fetch(`${this._url}/cards/${cardId}/likes`, {
-            headers: this._headers,
-            method: 'DELETE'
-        })
-            .then(this._handleResponse)
-    }
+    // setLikeCardPut(cardId) { // Постановка лайка
+    //     return fetch(`${this._url}/cards/${cardId}/likes`, {
+    //         headers: this._headers,
+    //         method: 'PUT'
+    //     })
+    //         .then(this._handleResponse)
+    // }
+    //
+    // deleteLikeCard(cardId) { // Снятие лайка
+    //     return fetch(`${this._url}/cards/${cardId}/likes`, {
+    //         headers: this._headers,
+    //         method: 'DELETE'
+    //     })
+    //         .then(this._handleResponse)
+    // }
 
     deleteCard(cardId) { // Удалкние карточки с сервера
         return fetch(`${this._url}/cards/${cardId}`, {
