@@ -3,12 +3,12 @@ import card from "./Card.jsx";
 
 function DeleteCardPopup({isOpen, onClose, onDeleteCard}) {
 
-    function handleDeleteCard (e) {
-        // Запрещаем браузеру переходить по адресу формы
-        e.preventDefault();
-
-        onDeleteCard(card._id)
-    }
+    // function handleDeleteCard (e) {
+    //     // Запрещаем браузеру переходить по адресу формы
+    //     e.preventDefault();
+    //
+    //     onDeleteCard(card._id)
+    // }
 
     return(
         <PopupWithForm
@@ -17,7 +17,7 @@ function DeleteCardPopup({isOpen, onClose, onDeleteCard}) {
             buttonText='Да'
             isOpen={isOpen}
             onClose={onClose}
-            onSubmit={handleDeleteCard}
+            onSubmit={onDeleteCard}
         />
     )
 }

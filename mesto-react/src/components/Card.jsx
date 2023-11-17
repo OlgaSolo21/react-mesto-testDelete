@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
-function Card({card, onCardClick, onCardLike, onCardDelete, onCardDeletePopup}) {
+function Card({card, onCardClick, onCardLike, onDeleteCard, onCardDeletePopup}) {
 
     const currentUser = useContext(CurrentUserContext) // подписываемся на контекст current User то есть получает данные о пользователе с сервера
 
@@ -18,10 +18,11 @@ function Card({card, onCardClick, onCardLike, onCardDelete, onCardDeletePopup}) 
 
     const handleLikeClick = () => {//постановка снятие лайка
         onCardLike(card)
+
     }
 
     const handleDeleteClick = () => {//удаление карточки
-        onCardDelete(card)
+        onCardDeletePopup(card)
     }
 
     return(

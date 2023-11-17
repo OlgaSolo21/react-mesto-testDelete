@@ -130,12 +130,11 @@ function App() {
               onEditProfile={handleEditProfileClick} //редактирование профиля
               onAddPlace={handleAddPlaceClick} //добавление картинки
               onEditAvatar={handleEditAvatarClick} //редактирование аватара
-              //onDeleteCardPopup={handleDeleteCardPopup} //попап удаления своей карточки
               onCardClick={handleOpenFullScreenCard}
               cards={cards}
               onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              //onCardDeletePopup={handleDeleteCardPopup}
+              //onDeleteCard={handleCardDelete}
+              onCardDeletePopup={handleDeleteCardPopup}
           />
           <Footer/>
 
@@ -157,11 +156,11 @@ function App() {
               onAddPlace={handleAddPlaceSubmit}
           />
 
-          {/*<DeleteCardPopup*/}
-          {/*    isOpen={isDeletePopup}*/}
-          {/*    onClose={closeAllPopups}*/}
-          {/*    onDeleteCard={handleCardDelete}*/}
-          {/*/>*/}
+          <DeleteCardPopup
+              isOpen={isDeletePopup}
+              onClose={closeAllPopups}
+              onDeleteCard={handleCardDelete}
+          />
 
           <ImagePopup
               card={selectedCard}

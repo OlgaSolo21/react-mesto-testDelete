@@ -5,7 +5,7 @@ import api from "../utils/api.js";
 import {useState, useEffect, useContext} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
-function Main({cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onCardLike, onCardDelete, onCardDeletePopup}) {
+function Main({cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onCardLike, onDeleteCard, onCardDeletePopup}) {
 
     const currentUser = useContext(CurrentUserContext) // подписываемся на контекст current User то есть получает данные о пользователе с сервера
 
@@ -55,8 +55,8 @@ function Main({cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onCa
                             card={card}
                             onCardClick={onCardClick}
                             onCardLike={onCardLike}
-                            //onCardDeletePopup={onCardDeletePopup}
-                            onCardDelete={onCardDelete}
+                            onCardDeletePopup={onCardDeletePopup}
+                            //onDeleteCard={onDeleteCard}
                         />
                         ))
                     }
